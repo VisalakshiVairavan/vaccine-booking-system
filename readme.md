@@ -10,6 +10,7 @@ Vaccine scheduler is nodejs backend application.
 ### To start the application in docker
 
 > npm run docker-build
+
 > npm run docker-start
 
 ### Generate docs
