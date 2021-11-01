@@ -3,7 +3,7 @@ const VaccineCenter = db.vaccineCenter;
 const Op = db.Sequelize.Op;
 
 /**
- * @namespace VaccineCenter
+ * @module VaccineCenter
  */
 
 /**

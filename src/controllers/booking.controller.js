@@ -4,7 +4,7 @@ const User = db.user;
 const moment = require('moment');
 
 /**
- * @namespace Booking
+ * @module Booking
  */
 
 /**
@@ -85,9 +85,14 @@ exports.create = (req, res) => {
  */
 
 exports.findAll = (_, res) => {
-  Booking.findAll()
+  db.sequelize
+    .query(
+      `SELECT b.uuid, u.uuid as user_uuid, u.name as user_name, u.nric, c.name as center_name, c.uuid as center_uuid 
+      FROM public.bookings b JOIN public.users u on u.uuid = b.user_uuid 
+      JOIN public.vaccine_centers c on b.center_uuid = c.uuid`
+    )
     .then(data => {
-      res.send(data);
+      res.send(data[0] || []);
     })
     .catch(err => {
       res.status(500).send({
@@ -98,44 +103,31 @@ exports.findAll = (_, res) => {
 
 /**
  * @summary DELETE api/booking/:uuid
- * @param {string}  uuid - Required
+ * @param {string}  uuid - Required - Route param
+ * @param {string}  user_uuid - Required Body param
  * @returns {object} Success message
  */
 
 exports.delete = (req, res) => {
   const uuid = req.params.uuid;
-  Booking.findAll({
-    attributes: ['user_uuid'],
-    where: { uuid: uuid }
+  User.destroy({
+    where: { uuid: req.body.user_uuid }
   })
-    .then(data => {
-      // Booking will be deleted on cascade
-      User.destroy({
-        where: { uuid: data[0].user_uuid }
-      })
-        .then(num => {
-          if (num == 1) {
-            res.send({
-              message: 'Booking was deleted successfully!'
-            });
-          } else {
-            res.send({
-              message: `Cannot delete Booking with uuid=${uuid}. Maybe Booking was not found!`
-            });
-          }
-        })
-        .catch(() => {
-          res.status(500).send({
-            message:
-              'Could not delete user associated with Booking with uuid=' + uuid
-          });
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: 'Booking was deleted successfully!'
         });
+      } else {
+        res.send({
+          message: `Cannot delete Booking with uuid=${uuid}. Maybe Booking was not found!`
+        });
+      }
     })
-    .catch(err => {
+    .catch(() => {
       res.status(500).send({
         message:
-          err.message ||
-          'Some error occurred while retrieving Nurse Scheduling.'
+          'Could not delete user associated with Booking with uuid=' + uuid
       });
     });
 };
@@ -143,31 +135,47 @@ exports.delete = (req, res) => {
 /**
  * @summary PUT api/booking/:uuid
  * @param {string} uuid - Required
+ * @param {string}  user_uuid - Required Body param
  * @returns {object} Updated Booking
  */
 
 exports.update = (req, res) => {
   const uuid = req.params.uuid;
-
-  Booking.update(req.body, {
-    where: { uuid: uuid }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Booking was updated successfully.'
+  const userValues = {
+    name: req.body.name,
+    nric: req.body.nric,
+    uuid: req.body.user_uuid
+  };
+  console.log('userValues', userValues);
+  User.update(userValues, {
+    where: { uuid: req.body.user_uuid }
+  }).then(num => {
+    if (num == 1) {
+      Booking.update(req.body, {
+        where: { uuid: uuid }
+      })
+        .then(num => {
+          if (num == 1) {
+            res.send({
+              message: 'Booking was updated successfully.'
+            });
+          } else {
+            res.send({
+              message: `Cannot update Booking with uuid=${uuid}. Maybe Booking was not found or req.body is empty!`
+            });
+          }
+        })
+        .catch(() => {
+          res.status(500).send({
+            message: 'Error updating Booking with uuid=' + uuid
+          });
         });
-      } else {
-        res.send({
-          message: `Cannot update Booking with uuid=${uuid}. Maybe Booking was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(() => {
-      res.status(500).send({
-        message: 'Error updating Booking with uuid=' + uuid
+    } else {
+      res.send({
+        message: `Cannot delete Booking with uuid=${uuid}. Maybe Booking was not found!`
       });
-    });
+    }
+  });
 };
 
 const getFormattedDateWithBuffer = dateString => {

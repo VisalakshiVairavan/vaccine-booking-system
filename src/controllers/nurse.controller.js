@@ -3,15 +3,16 @@ const Nurse = db.nurse;
 const Op = db.Sequelize.Op;
 
 /**
- * @namespace Nurse
+ * @module Nurse
  */
 
 /**
  * @summary POST api/nurse
  * @param {string}  name - Required
+ * @param {string} center_uuid - Required
  */
 exports.create = (req, res) => {
-  if (!req.body.name) {
+  if (!req.body.name || !req.body.center_uuid) {
     res.status(400).send({
       message: 'Required fields missing!'
     });

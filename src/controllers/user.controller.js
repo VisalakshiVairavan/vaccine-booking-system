@@ -3,7 +3,7 @@ const User = db.user;
 const Op = db.Sequelize.Op;
 
 /**
- * @namespace User
+ * @module User
  */
 
 /**

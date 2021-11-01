@@ -2,7 +2,7 @@ const db = require('../models');
 const WeeklyNurseSchedule = db.weeklyNurseSchedule;
 const Op = db.Sequelize.Op;
 /**
- * @namespace WeeklyNurseSchedule
+ * @module WeeklyNurseSchedule
  */
 
 /**

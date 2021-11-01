@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "NODE_ENV=production node src/app.js",
-    "dev": "nodemon src/app.js",
+    "dev": "NODE_ENV=dev nodemon src/app.js",
     "jsdocs": "jsdoc -a all -c jsdoc.json -r src -R README.md -d docs/jsdoc",
     "docs": "jsdoc2md src/*.js  > docs/API.md",
     "test": "mocha --reporter spec",
@@ -39,9 +39,11 @@
     "sequelize": "^6.8.0"
   },
   "devDependencies": {
+    "docdash": "^1.2.0",
     "eslint": "^8.1.0",
     "faker": "^5.5.3",
     "jsdoc": "^3.6.7",
+    "jsdoc-to-markdown": "^7.1.0",
     "nodemon": "^2.0.14",
     "sequelize-cli": "^6.2.0",
     "sinon": "^11.1.2"
