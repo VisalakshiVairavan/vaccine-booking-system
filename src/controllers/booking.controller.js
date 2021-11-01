@@ -1,7 +1,6 @@
 const db = require('../models');
 const Booking = db.booking;
 const User = db.user;
-const APPOINTMENT_TIME = 15;
 const moment = require('moment');
 
 /**
@@ -173,7 +172,7 @@ exports.update = (req, res) => {
 
 const getFormattedDateWithBuffer = dateString => {
   const date = moment(dateString)
-    .add(APPOINTMENT_TIME, 'm')
+    .add(process.env.APPOINTMENT_TIME_MINS, 'm')
     .format('YYYY-MM-DD HH:mm:ss.SSS ZZ');
   console.log('getISOStringWithBuffer', date);
   return date;

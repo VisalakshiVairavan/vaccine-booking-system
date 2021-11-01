@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+process.env.APPOINTMENT_TIME_MINS = 15;
 // parse requests of content-type - application/json
 app.use(express.json());
 

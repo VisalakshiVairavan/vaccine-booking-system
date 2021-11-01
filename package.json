@@ -10,7 +10,7 @@
     "docs": "jsdoc2md src/*.js  > docs/API.md",
     "test": "mocha --reporter spec",
     "docker-build": "docker-compose build",
-    "docker-start": " docker-compose up",
+    "docker-start": "docker-compose up",
     "docker-cleanup": "docker-compose down && docker-compose rm"
   },
   "repository": {
@@ -40,8 +40,10 @@
   },
   "devDependencies": {
     "eslint": "^8.1.0",
+    "faker": "^5.5.3",
     "jsdoc": "^3.6.7",
     "nodemon": "^2.0.14",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "sinon": "^11.1.2"
   }
 }
