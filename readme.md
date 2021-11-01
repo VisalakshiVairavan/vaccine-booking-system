@@ -16,7 +16,7 @@ Vaccine scheduler is nodejs backend application.
 ### Generate docs
 
 > npm run jsdocs
-> Docs will be generated in `/doc`. Launch `/doc/jsdocsindex.html` in a live server
+ Docs will be generated in `/doc`. Launch `/doc/jsdocsindex.html` in a live server
 
 ### Run tests
 
